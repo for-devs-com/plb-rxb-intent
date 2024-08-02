@@ -1,0 +1,14 @@
+---
+instance_limits:
+  min: 3
+  max: 12
+rules:
+  - rule_type: "memory"
+    threshold:
+      min: 20
+      max: 80
+  - rule_type: "cpu"
+    threshold:
+      min: 20
+      max: 80
+scheduled_limit_changes: [ ]

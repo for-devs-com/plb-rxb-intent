@@ -1,0 +1,101 @@
+customJavaOpts: "-javaagent:/app/lib/newrelic-agent-7.5.0.jar
+  -Dspring.profiles.active=service
+  -Dspring.config.location=classpath:bootstrap.yml,classpath:properties/openshift/common/application.properties
+  -Dspring.cloud.config.enable=true
+  -Dlogging.config=classpath:properties/common/log4j2.properties
+  -Dspring.cloud.config.uri=https://config-server-dev.express-scripts.com/config
+  -Dspring.application.name=pharmacylevelbenefit-fullintent-1-dev
+  -Dspring.cloud.config.name=pharmacylevelbenefit-fullintent,pharmacyLevelBenefit-kafka_openshift,pharmacylevelBenefits-fullIntent-errors,pharmacylevelbenefits-reportingapi
+  -Dspring.cloud.config.profile=pharmacylevelbenefit-fullintent,pharmacyLevelBenefit-kafka_openshift,pharmacylevelBenefits-fullIntent-errors,pharmacylevelbenefits-reportingapi"
+
+
+resources:
+  requests:
+    cpu: 800m
+
+readinessProbe:
+  tcpSocket:
+    port: 8080
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 30
+
+livenessProbe:
+  tcpSocket:
+    port: 8080
+  initialDelaySeconds: 180
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 30
+
+#hpa:
+#  minReplicas: 1
+#  maxReplicas: 1
+
+configureHpa: false
+replicas: 1
+
+customEnv:
+
+  - name: config.key.pharmacylevelbenefit-fullintent.1
+    valueFrom:
+      secretKeyRef:
+        name: pharmacylevelbenefit-fullintent-config
+        key: config_key_pharmacylevelbenefit_fullintent_1
+
+  - name: CONSUMER_KEY
+    valueFrom:
+      secretKeyRef:
+        name: pharmacylevelbenefit-fullintent-config
+        key: Authinator_consumer_key
+
+  - name: config.key.pharmacylevelBenefits-fullIntent-errors.1
+    valueFrom:
+      secretKeyRef:
+        name: pharmacylevelbenefit-fullintent-config
+        key: config_key_pharmacylevelBenefits_fullIntent_errors_1
+
+  - name: config.key.pharmacylevelbenefit-fullintent-oauth1.1
+    valueFrom:
+      secretKeyRef:
+        name: pharmacylevelbenefit-fullintent-config
+        key: config_key_pharmacylevelbenefit_fullintent_oauth1_1
+
+  - name: config.key.pharmacyLevelBenefit-kafka_openshift.1
+    valueFrom:
+      secretKeyRef:
+        name: pharmacylevelbenefit-fullintent-config
+        key: config_key_pharmacyLevelBenefit_kafka_openshift_1
+
+  - name: config.key.pharmacylevelbenefits-reportingapi.2
+    valueFrom:
+      secretKeyRef:
+        name: pharmacylevelbenefit-fullintent-config
+        key: config_key_pharmacylevelbenefits_reportingapi_2
+
+  - name: CONSUMER_KEY_PLB_BEF
+    valueFrom:
+      secretKeyRef:
+        name: pharmacylevelbenefit-fullintent-config
+        key: Authinator_key_plb_bef
+
+  - name: CONSUMER_KEY_Authinator_key_plb_consume_bef
+    valueFrom:
+      secretKeyRef:
+        name: pharmacylevelbenefit-fullintent-config
+        key: Authinator_key_plb_consume_bef
+
+  - name: messaging.destination1
+    value: "TP.BEF.ERRORS"
+
+  - name: messaging.destination2
+    value: "TP.BEF.PHARMACY.BENEFIT.IMPLEMENTED"
+
+  - name: messaging.destination3
+    value: "TP.BEF.PLB.FULL.INTENT.REQUEST"
+
+  - name: messaging.destination4
+    value: "TP.BEF.PLB.FULL.INTENT.RESPONSE"

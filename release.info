@@ -1,0 +1,13 @@
+{
+    "JiraProject": "SPCFR",
+    "FixVersion": "2.1.0-SNAPSHOT",
+    "PrimaryContactName": "Sumanth Parashuram",
+    "PrimaryContactNumber": "8431089958",
+    "SecondaryContactName": "Michael",
+    "SecondaryContactNumber": "8888888888",
+    "ContactInformation": "",
+    "RITMNumber": "",
+    "NSWENumber": "",
+    "BuildDependencies": "No",
+    "BuildDeploymentOrder": ""
+}

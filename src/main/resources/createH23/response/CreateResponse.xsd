@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid Technologies Online Tools 1.0 (https://www.liquid-technologies.com) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
+           elementFormDefault="qualified">
+    <xs:element name="Response">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Flowid" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="StatusCode" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="StatusMessage" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+                <xs:element name="RuleCount" type="xs:unsignedByte"/>
+
+                <xs:element name="PLBRuleDetails">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="PLBRule" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="EffDateOfchange" type="xs:string"/>
+                                        <xs:element name="Operation" type="xs:string"/>
+                                        <xs:element name="RuleStatusCode" type="xs:string"/>
+                                        <xs:element name="RuleStatusMessage" type="xs:string"/>
+                                        <xs:element name="RuleAgnID" type="xs:unsignedInt"/>
+                                        <xs:element name="ParentAgn" type="xs:unsignedInt"/>
+                                        <xs:element name="ClientAgn" type="xs:unsignedInt"/>
+                                        <xs:element name="EntityExclusionInd" type="xs:string"/>
+                                        <xs:element name="EntityExclusionTbl">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="EntityExclusion">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="ClientExclAgnID"
+                                                                            type="xs:unsignedInt"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="NtwPhmName" type="xs:string"/>
+                                        <xs:element name="NtwPhmTypCde" type="xs:unsignedShort"/>
+                                        <xs:element name="State" type="xs:string"/>
+                                        <xs:element name="PhmChnName" type="xs:string"/>
+                                        <xs:element name="PhmNetworkExclInd" type="xs:string"/>
+                                        <xs:element name="PhmNetworkExclTbl" minOccurs="0" maxOccurs="unbounded"/>
+                                        <xs:element name="DomainType" type="xs:unsignedByte"/>
+                                        <xs:element name="ProductType" type="xs:unsignedByte"/>
+                                        <xs:element name="PrdHierarchyInd" type="xs:unsignedByte"/>
+                                        <xs:element name="AttributeDtlsTbl">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="AttributeDtls">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="AttributeName" type="xs:string"/>
+                                                                <xs:element name="AttributeValue" type="xs:string"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="EffectiveDate" type="xs:string"/>
+                                        <xs:element name="EndDate" type="xs:string"/>
+                                        <xs:element name="Channel" type="xs:unsignedByte"/>
+                                        <xs:element name="OperId" type="xs:string"/>
+                                        <xs:element name="Timestamp" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

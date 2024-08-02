@@ -1,0 +1,77 @@
+---
+applications:
+  - buildpack: java_buildpack_2021-5
+    memory: 2GB
+    instances: 1
+    stack: cflinuxfs3
+    path: ./jars/pharmacylevelbenefit-fullintent-2.2.0-SNAPSHOT.jar
+    name: pharmacylevelbenefit-fullintent-1-dev-candidate
+    services:
+      - authinator
+      - plb-consume-bef-authinator
+      - fullintent-config-server
+      - newrelic
+      - elk-syslog-drain
+    env:
+      logging.config: "classpath:properties/common/log4j2.properties"
+      spring.application.name: pharmacylevelbenefit-fullintent-1-dev
+      spring.config.location: classpath:properties/common/application.properties
+      spring.cloud.config.uri: "https://config-server-dev.express-scripts.com/config"
+      spring.profiles.active: "service,cloud"
+      spring.cloud.config.profile: pharmacylevelbenefit-fullintent,pharmacyLevelBenefit-kafka,pharmacylevelBenefits-fullIntent-errors,pharmacylevelbenefits-reportingapi
+
+  - buildpack: java_buildpack_2021-5
+    memory: 2GB
+    instances: 1
+    stack: cflinuxfs3
+    path: ./jars/pharmacylevelbenefit-fullintent-2.2.0-SNAPSHOT.jar
+    name: pharmacylevelbenefit-fullintent-1-qa-candidate
+    services:
+      - authinator
+      - plb-consume-bef-authinator
+      - fullintent-config-server
+      - elk-syslog-drain
+      - newrelic
+    env:
+      logging.config: "classpath:properties/common/log4j2.properties"
+      spring.application.name: pharmacylevelbenefit-fullintent-1-qa
+      spring.config.location: classpath:properties/common/application.properties
+      spring.cloud.config.uri: "https://config-server-qa.express-scripts.com/config"
+      spring.profiles.active: "service,cloud"
+      spring.cloud.config.profile: pharmacylevelbenefit-fullintent,pharmacyLevelBenefit-kafka,pharmacylevelBenefits-fullIntent-errors
+
+  - buildpack: java_buildpack_2021-5
+    memory: 2GB
+    instances: 1
+    stack: cflinuxfs3
+    path: ./jars/pharmacylevelbenefit-fullintent-2.2.0-SNAPSHOT.jar
+    name: pharmacylevelbenefit-fullintent-1-prod-candidate
+    services:
+      - authinator
+      - plb-consume-bef-authinator
+      - fullintent-config-server
+      - newrelic
+    env:
+      logging.config: "classpath:properties/common/log4j2.properties"
+      spring.application.name: pharmacylevelbenefit-fullintent-1-prod
+      spring.cloud.config.uri: "https://config-server.express-scripts.com/config"
+      spring.profiles.active: "service,cloud"
+      spring.cloud.config.profile: pharmacylevelbenefit-fullintent,pharmacyLevelBenefit-kafka,pharmacylevelBenefits-fullIntent-errors
+
+  - buildpack: java_buildpack_2021-5
+    memory: 2GB
+    instances: 1
+    stack: cflinuxfs3
+    path: ./jars/pharmacylevelbenefit-fullintent-2.2.0-SNAPSHOT.jar
+    name: pharmacylevelbenefit-fullintent-1-dr-candidate
+    services:
+      - authinator
+      - plb-consume-bef-authinator
+      - fullintent-config-server
+      - newrelic
+    env:
+      logging.config: "classpath:properties/common/log4j2.properties"
+      spring.application.name: pharmacylevelbenefit-fullintent-1-dr
+      spring.cloud.config.uri: "https://config-server.express-scripts.com/config"
+      spring.profiles.active: "service,cloud"
+      spring.cloud.config.profile: pharmacylevelbenefit-fullintent,pharmacyLevelBenefit-kafka,pharmacylevelBenefits-fullIntent-errors

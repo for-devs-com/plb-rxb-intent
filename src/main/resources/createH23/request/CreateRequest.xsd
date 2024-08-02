@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid Technologies Online Tools 1.0 (https://www.liquid-technologies.com) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
+           elementFormDefault="qualified">
+    <xs:element name="Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Flowid" type="xs:string"/>
+                <xs:element name="OperatorId" minOccurs="1" maxOccurs="1">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"></xs:minLength>
+                            <xs:maxLength value="8"></xs:maxLength>
+                            <xs:whiteSpace value="collapse"></xs:whiteSpace>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="RuleCount" type="xs:unsignedInt"/>
+                <xs:element name="PLBRuleDetails">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="PLBRule" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="EffDateOfchange" type="xs:string"/>
+                                        <xs:element name="Operation" type="xs:string"/>
+                                        <xs:element name="ParentAgn" type="xs:string"/>
+                                        <xs:element name="ClientAgn" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                                        <xs:element name="EntityExclusionInd" minOccurs="1" maxOccurs="1">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="Y"/>
+                                                    <xs:enumeration value="N"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="EntityExclusionTbl">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="EntityExclusion">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="ClientExclAgnID" type="xs:string"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="PhmNetworkDetails">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="NtwPhmName" type="xs:string"/>
+                                                    <xs:element name="NtwPhmTypCde" type="xs:string"/>
+                                                    <xs:element name="State"/>
+                                                    <xs:element name="PhmChnName"/>
+                                                    <xs:element name="PhmNetworkExclInd">
+                                                        <xs:simpleType>
+                                                            <xs:restriction base="xs:string">
+                                                                <xs:enumeration value="Y"/>
+                                                                <xs:enumeration value="N"/>
+                                                            </xs:restriction>
+                                                        </xs:simpleType>
+                                                    </xs:element>
+                                                    <xs:element name="PhmNetworkExclTbl">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="PhmNetworkExcl" minOccurs="0"
+                                                                            maxOccurs="unbounded">
+                                                                    <xs:complexType>
+                                                                        <xs:sequence>
+                                                                            <xs:element name="ExclNtwPhmName"/>
+                                                                            <xs:element name="ExclNtwPhmTypCde"/>
+                                                                            <xs:element name="ExclState"/>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="DomainType" type="xs:string"/>
+                                        <xs:element name="ProductType" type="xs:string"/>
+                                        <xs:element name="PrdHierarchyInd">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="Y"/>
+                                                    <xs:enumeration value="N"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="AttributeDtlsTbl">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element maxOccurs="unbounded" name="AttributeDtls">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="AttributeNme" type="xs:string"/>
+                                                                <xs:element name="AttributeValue" type="xs:string"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="EffectiveDate"/>
+                                        <xs:element name="EndDate" type="xs:string"/>
+                                        <xs:element name="Channel" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="EffectiveDate"/>
+                <xs:element name="EndDate" type="xs:string"/>
+                <xs:element name="Channel" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://pharmacy.benefits.esrx.com/CreateBenefitsResponse"
+           xmlns="http://pharmacy.benefits.esrx.com/CreateBenefitsResponse">
+
+    <xs:element name="CreateBenefitsResponse">
+
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="StatusCode" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="StatusMessage" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+                <xs:element name="BenefitRules" type="BenefitRules"></xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="BenefitRules">
+        <xs:sequence>
+            <xs:element name="BenefitRule" type="BenefitRule" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="BenefitRule">
+        <xs:sequence>
+            <xs:element name="CorrelationId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ErrorCode" type="xs:string"></xs:element>
+            <xs:element name="ErrorMessage" type="xs:string"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

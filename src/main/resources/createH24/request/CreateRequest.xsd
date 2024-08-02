@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid Technologies Online Tools 1.0 (https://www.liquid-technologies.com) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
+           elementFormDefault="qualified">
+    <xs:element name="Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Flowid" type="xs:string"/>
+                <xs:element name="Operid" minOccurs="1" maxOccurs="1">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"></xs:minLength>
+                            <xs:maxLength value="8"></xs:maxLength>
+                            <xs:whiteSpace value="collapse"></xs:whiteSpace>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="RecordCount" type="xs:unsignedInt"/>
+                <xs:element name="PLBRuleDetails">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="PLBRule" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="EntityType" type="xs:string"/>
+                                        <xs:element name="EntityOpid" type="xs:string"/>
+                                        <xs:element name="EntityAgn" type="xs:string"/>
+                                        <xs:element name="EastGrpOpid" type="xs:string"/>
+                                        <xs:element name="SourceEntity" type="xs:string"/>
+                                        <xs:element name="SourceEntityGr" type="xs:string"/>
+                                        <xs:element name="SourceCopay" type="xs:string"/>
+                                        <xs:element name="IntentEffDate" type="xs:string"/>
+                                        <xs:element name="ChannelCde" type="xs:string"/>
+                                        <xs:element name="ParentType" type="xs:string"/>
+                                        <xs:element name="ParentName" type="xs:string"/>
+                                        <xs:element name="ParentAgn" type="xs:string"/>
+                                        <xs:element name="Operation" type="xs:string"/>
+                                        <xs:element name="ClientExclInd" minOccurs="1" maxOccurs="1">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="Y"/>
+                                                    <xs:enumeration value="N"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="ClientExclTbl">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="ClientExcl" minOccurs="0" maxOccurs="unbounded">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="ExclEntityTypCde" type="xs:string"/>
+                                                                <xs:element name="ExclEntity" type="xs:string"/>
+                                                                <xs:element name="ExclEntityAgn" type="xs:string"/>
+                                                                <xs:element name="ExclEastGroup" type="xs:string"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="NetworkType" type="xs:string"/>
+                                        <xs:element name="NetworkId" type="xs:string"/>
+                                        <xs:element name="Chain" type="xs:string"/>
+                                        <xs:element name="ChainName" type="xs:string"/>
+                                        <xs:element name="NpiNumber" type="xs:string"/>
+                                        <xs:element name="PharName" type="xs:string"/>
+                                        <xs:element name="State" type="xs:string"/>
+                                        <xs:element name="NetworkExclInd">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="Y"/>
+                                                    <xs:enumeration value="N"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="NetworkExclTbl">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="NetworkExcl" minOccurs="0" maxOccurs="unbounded">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="ExclNetworkType" type="xs:string"/>
+                                                                <xs:element name="ExclNetworkId" type="xs:string"/>
+                                                                <xs:element name="ExclChain" type="xs:string"/>
+                                                                <xs:element name="ExclNpiNumber" type="xs:string"/>
+                                                                <xs:element name="ExclState" type="xs:string"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="ProductType" type="xs:string"/>
+                                        <xs:element name="ProductDetailTbl">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element maxOccurs="unbounded" name="ProductDetail">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="ProductAttribute" type="xs:string"/>
+                                                                <xs:element name="ProductValue" type="xs:string"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="HierarchyType" type="xs:string"/>
+                                        <xs:element name="IntentEndDate" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
