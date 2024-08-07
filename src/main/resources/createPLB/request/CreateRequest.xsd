@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:tns="http://request.create.inbound.pharmacybenefit.benefits.esrx.com"
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://request.create.inbound.pharmacybenefit.benefits.esrx.com"
+        elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <element name="CreateRequest">
+        <complexType>
+            <sequence>
+                <element name="TestMode" minOccurs="0" maxOccurs="1">
+                    <simpleType>
+                        <restriction base="string">
+                            <enumeration value="Y"/>
+                            <enumeration value="N"/>
+                        </restriction>
+                    </simpleType>
+                </element>
+                <element name="UserId" minOccurs="0" maxOccurs="1">
+                    <simpleType>
+                        <restriction base="string">
+                            <minLength value="1"></minLength>
+                            <maxLength value="8"></maxLength>
+                            <whiteSpace value="collapse"></whiteSpace>
+                        </restriction>
+                    </simpleType>
+                </element>
+                <element name="OrgId" minOccurs="0" maxOccurs="1">
+                    <simpleType>
+                        <restriction base="string">
+                            <minLength value="0"></minLength>
+                            <maxLength value="20"></maxLength>
+                        </restriction>
+                    </simpleType>
+                </element>
+                <element name="Channel" type="string" minOccurs="0" maxOccurs="1"/>
+                <element name="TimeOut" type="long" minOccurs="0" maxOccurs="1"/>
+                <element name="OperatorId" type="string" minOccurs="1" maxOccurs="1"/>
+                <element name="CarrierAgnId" type="string" minOccurs="1" maxOccurs="1"/>
+                <element name="CarrierName" type="string" minOccurs="0" maxOccurs="1"/>
+                <element name="Commit" minOccurs="0" maxOccurs="1">
+                    <simpleType>
+                        <restriction base="string">
+                            <enumeration value="Y"/>
+                            <enumeration value="N"/>
+                        </restriction>
+                    </simpleType>
+                </element>
+                <element name="BenefitRules" type="tns:BenefitRules" maxOccurs="1" minOccurs="1"/>
+            </sequence>
+        </complexType>
+    </element>
+    <complexType name="BenefitRules">
+        <sequence>
+            <element name="benefitRule" type="tns:BenefitRule" minOccurs="1" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="BenefitRule">
+        <sequence>
+            <element name="CorrelationId" type="string" minOccurs="1" maxOccurs="1"/>
+            <element name="ClientEntityDetails" type="tns:ClientEntity" minOccurs="0" maxOccurs="1"/>
+            <element name="PharmacyNetworkDetails" type="tns:PharmacyNetworkEntity" minOccurs="1" maxOccurs="1"/>
+            <element name="ProductDetails" type="tns:Product" minOccurs="1" maxOccurs="1"/>
+            <element name="EffectiveDate" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="EndDate" type="string" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+    <complexType name="ClientEntity">
+        <sequence>
+            <!--  Dual Hierachy Changes to Accept any Entity -->
+            <element name="EntityAgnId" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="EntityName" type="string" minOccurs="0" maxOccurs="1"/>
+            <!--  Dual Hierachy Changes Accept any Entity-->
+            <element name="ExclusionEntities" type="tns:ExclusionEntities"/>
+        </sequence>
+    </complexType>
+    <complexType name="ExclusionEntities">
+        <sequence>
+
+            <element name="Entity" type="tns:Entity" minOccurs="0" maxOccurs="unbounded"/>
+
+        </sequence>
+    </complexType>
+    <complexType name="PharmacyNetworkEntity">
+        <sequence>
+            <element name="NetworkId" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="ChainId" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="State" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="PharmacyId" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="AllPharmacyInd" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="PharmacyExclusionEntities" type="tns:PharmacyExclusionEntities"/>
+        </sequence>
+    </complexType>
+    <complexType name="PharmacyExclusionEntities">
+        <sequence>
+            <element name="PharmacyEntity" type="tns:PharmacyEntity" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+    <complexType name="PharmacyEntity">
+        <sequence>
+            <element name="NetworkId" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="ChainId" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="State" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="PharmacyId" type="string" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+    <complexType name="Product">
+        <sequence>
+            <element name="ChannelType" type="string" minOccurs="1" maxOccurs="1"/>
+            <element name="HierarchyIndicartor" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="Copay" type="tns:Copay" minOccurs="0" maxOccurs="1"/>
+            <element name="PLan" type="tns:Plan" minOccurs="0" maxOccurs="1"/>
+            <element name="Accums" type="tns:Accums" minOccurs="0" maxOccurs="1"/>
+            <element name="ZBLIndicator" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="MRXCIndicator" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="EligibilityGrace" type="tns:EligibilityGrace" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="Copay">
+        <sequence>
+            <element name="Indicator" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="TemplateAgnId" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="TemplateName" type="string" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="Plan">
+        <sequence>
+            <element name="Indicator" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="DCRSSuperId" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="LegacyPlanId" type="string" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="Accums">
+        <sequence>
+
+            <element name="DEDByPassIndicator" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="OOPByPassIndicator" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="CAPByPassIndicator" type="string" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+    <complexType name="EligibilityGrace">
+        <sequence>
+            <element name="Indicator" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="Percentage" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="DaysSupply" type="string" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="Entity">
+        <sequence>
+            <!--  Dual Hierachy Changes Accept any Entity-->
+            <element name="EntityAgnId" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="EntityName" type="string" minOccurs="0" maxOccurs="1"/>
+            <!--  Dual Hierachy Changes Accept any Entity-->
+        </sequence>
+    </complexType>
+</schema>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="HC17Request">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="TestMode" minOccurs="0" maxOccurs="1">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="Y"/>
+                            <xsd:enumeration value="N"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="UserId" minOccurs="1" maxOccurs="1">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="1"/>
+                            <xsd:maxLength value="8"/>
+                            <xsd:whiteSpace value="collapse"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Role" minOccurs="0" maxOccurs="1">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="1"/>
+                            <xsd:maxLength value="8"/>
+                            <xsd:whiteSpace value="collapse"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Channel" minOccurs="0" maxOccurs="1">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="1"/>
+                            <xsd:maxLength value="3"/>
+                            <xsd:whiteSpace value="collapse"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Format" minOccurs="0" maxOccurs="1">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="1"/>
+                            <xsd:maxLength value="1"/>
+                            <xsd:whiteSpace value="collapse"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="OrgId" minOccurs="0" maxOccurs="1">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="1"/>
+                            <xsd:maxLength value="5"/>
+                            <xsd:whiteSpace value="collapse"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="RequestId" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="RequestType" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="RequestStatus" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="RequestDtl" type="RequestDtl" minOccurs="1" maxOccurs="50"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="RequestDtl">
+        <xsd:sequence>
+            <!-- <xsd:element name="ReqDtlStatus" type="xsd:string" minOccurs="0" maxOccurs="1" /> -->
+            <xsd:element name="ReqDtlTxt" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

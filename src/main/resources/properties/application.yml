@@ -1,0 +1,63 @@
+server:
+  port: 7001
+  servlet:
+    context-path: /
+  error:
+    whitelabel:
+      enabled: false
+#
+#spring:
+#  jmx:
+#    enabled: true
+#    default_domain: Kafdrop
+#  jackson:
+#    deserialization:
+#      fail_on_unknown_properties: false
+#      read_unknown_enum_values_as_null: true
+spring:
+  profiles:
+    active: local
+  cloud:
+    config:
+      profile: plb-commons,plb-rxb-intent
+      name: ${spring.application.name}
+      failFast: false
+      enabled: true
+      uri: https://config-server-dev.express-scripts.com/config
+
+  security:
+    basic:
+      enabled: false
+
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure.include: "*"
+  server:
+    port: 7001
+
+
+com:
+  esrx:
+    app:
+      security:
+        oauth2:
+          consumer:
+            clientId: 1ebef1fc-cabd-658e-a466-eeee0af0860e
+            clientSecret: 1znm75Wjrs3fWddNFiYdWsNZ7Gc=
+            accessTokenURL: https://api-qa.express-scripts.io/v1/auth/oauth2/token
+            rootAccessTokenPropagationEnabled: false
+
+#enable below line when using from local and trying to connect to config server
+#kafka:
+#  jaas:
+#    config: com.sun.security.auth.module.Krb5LoginModule required debug=true doNotPrompt=true useTicketCache=false principal="DKFKBEF@ACCOUNTS.ROOT.CORP" useKeyTab=true serviceName="cdkafka" keyTab="C:/PROJECTS/BEF/benefitEventFlow-Intake/src/main/resources/properties/dev/DKFKBEF.keytab" client=true storeKey=true;
+#    #config: com.sun.security.auth.module.Krb5LoginModule required debug=true doNotPrompt=true useTicketCache=false principal="UKFKBEF@ACCOUNTS.ROOT.CORP" useKeyTab=true serviceName="cukafka" keyTab="C:/PROJECTS/BEF/benefitEventFlow-Intake/src/main/resources/properties/uat/UKFKBEF.keytab" client=true storeKey=true;
+
+#disable below line when using from local and trying to connect to config server
+#kafka:
+#  jaas:
+#    config:${jaas.config}
+

@@ -1,0 +1,25 @@
+spring:
+  cloud:
+    config:
+      enabled: true
+      name: ${spring.application.name}
+      fail-fast: false
+    bus:
+      enabled: false
+    polling:
+      enabled: true
+  application:
+    name: PlbRxbIntentApplication
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: local
+
+health:
+  config:
+    enabled: true
+com:
+  esrx:
+    config:
+      bus:
+        enabled: false

@@ -1,0 +1,25 @@
+        01 CIT-HEADER-RECORD.                         
+          10 CIT-FLOW-ID               PIC X(36).  
+          10 FILLER                    PIC X(01).  
+          10 CIT-PTM-REQ-ID            PIC 9(10).  
+          10 FILLER                    PIC X(01).  
+          10 CIT-OPER-ID               PIC X(08).  
+          10 FILLER                    PIC X(01).  
+          10 CIT-RECORD-COUNT          PIC 9(06).  
+          10 FILLER                    PIC X(01).  
+          10 CIT-VALID-FLAG-FILE       PIC X(01).  
+            88 CIT-VALID-FILE             VALUE 'Y'.  
+            88 CIT-INVALID-FILE           VALUE 'N'.  
+          10 FILLER                    PIC X(01).  
+          10 CIT-SEVERITY-F            PIC X(18).  
+          10 FILLER                    PIC X(01).  
+          10 CIT-CATEGORY-F            PIC X(14).  
+          10 FILLER                    PIC X(01).  
+          10 CIT-MESSAGE-F             PIC X(500). 
+          10 FILLER                    PIC X(01).       
+          10 CIT-USER-ACTION-F         PIC X(256).      
+          10 FILLER                    PIC X(01).       
+          10 CIT-PROCS-STAGE-F         PIC X(24).       
+          10 FILLER                    PIC X(01).       
+          10 CIT-SOURCE-F              PIC X(06).       
+          10 FILLER                    PIC X(1252).     

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="Response">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="StatusCode" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="StatusMessage" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="ParentAgn" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="RuleCount" type="RuleCount" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="BenefitsRule" type="BenefitsRule" minOccurs="0" maxOccurs="1"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="RuleCount">
+        <xsd:sequence>
+            <xsd:element name="ClientsPLBCount" type="ClientsPLBCount" minOccurs="0" maxOccurs="unbounded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ClientsPLBCount">
+        <xsd:sequence>
+            <xsd:element name="RuleClientAgn" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="ClientRuleCount" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="BenefitsRule">
+        <xsd:sequence>
+
+            <xsd:element name="PLBRuleDtls" type="PLBRuleDtls" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="PLBRuleDtls">
+        <xsd:sequence>
+            <xsd:element name="RuleAgnID" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="ClientExclEntities" type="ClientExclEntities" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="PharmacyNetworkDetails" type="PharmacyNetworkDetails" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="ProductDetails" type="ProductDetails" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="OperId" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="Timestamp" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="ChannelCode" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ClientExclEntities">
+        <xsd:sequence>
+            <xsd:element name="ClientExclEntity" type="ClientExclEntity" minOccurs="0" maxOccurs="10"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ClientExclEntity">
+        <xsd:sequence>
+            <xsd:element name="ClientExclAgnID" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="PharmacyNetworkDetails">
+        <xsd:sequence>
+            <xsd:element name="NtwPhmName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="NtwPhmTypCde" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="State" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="NtwExclEntities" type="NtwExclEntities" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="NtwExclEntities">
+        <xsd:sequence>
+            <xsd:element name="NtwExclEntity" type="NtwExclEntity" minOccurs="0" maxOccurs="10"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="NtwExclEntity">
+        <xsd:sequence>
+            <xsd:element name="ExclNtwPhmName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="ExclNtwPhmTypCde" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="ExclState" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ProductDetails">
+        <xsd:sequence>
+
+            <xsd:element name="ProductType" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="HierarchyIndicator" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="Attributes" type="Attributes" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="EffectiveDate" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="EndDate" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Attributes">
+        <xsd:sequence>
+            <xsd:element name="AttributeDetails" type="AttributeDetails" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="AttributeDetails">
+        <xsd:sequence>
+            <xsd:element name="AttributeName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="AttributeValue" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

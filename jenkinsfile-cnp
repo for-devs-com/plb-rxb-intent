@@ -1,0 +1,219 @@
+@Library('Cloud_Native_Pipeline') _
+
+env.CNP_DEPLOYABLE_BRANCHES="^develop,^release.*,^hotfix.*,^feature.*,^os.*"
+
+def modules  = loadModules(["openshift"])
+
+devcluster = "hs-3-nonprod"
+qacluster = "hs-3-nonprod"
+prodCluster = "hs-2-prod"
+devNamespace = "plb-dev"
+qaNamespace = "plb-qa"
+prodNamespace = "plb-prod"
+
+// This can be a group name or list of LAN IDs seperated by commas
+def approvers = "C7N9XQ,C7N9W6,C7Z6NZ,E40968,C7X7R4,C7Z3DR,EN7125"
+
+cnpNode (modules) {
+	// pull source from git and run preflight checks
+	checkoutFromScm()
+
+	def buildResult = build()
+
+	def artifact = "${getVal(buildResult,"publishUrl")}"
+	def pcfArtifact = buildResult.commandOutput.publishUrl
+
+
+	def imageBuildResult = buildImage([
+			pomPath:"pom.xml",
+			generateDockerFile:true,
+			org:"pharmacylevelbenefits",
+			appendCommitIdToTag:true,
+			skipBuildIfExists:true,
+			artifact: artifact
+	])
+
+// ------- DEPLOY TO DEV OpenShift---- //
+	env.CNP_OC_BASE_HOST=".openshift.evernorthcloud.com"
+
+	deploy([configDir       : "dev",
+			platform        : "OpenShift",
+			cluster         :  devcluster,
+			imageName	    : "${getVal(imageBuildResult, "imageName")}",
+			imageTag	    : "${getVal(imageBuildResult, "tagName")}",
+			ingressBaseHost : "apps-2.hs-3-nonprod.openshift.evernorthcloud.com",
+			appName         : "pharmacylevelbenefit-rxb-intent-1-dev",
+			useArgoCD       : true,
+			argoAppName     : "pharmacylevelbenefit-rxb-intent-1-dev",
+			namespace       : devNamespace,
+			timeout         : "60s",
+			progressingRetryCount: 10,
+			configRepo: "https://github.sys.cigna.com/cigna/plb-dev-argocd",
+			monitoringSolution: "newrelic",
+			cmdbApplicationServiceNumber: "AS026227",
+			valuesFile      : "preview-values.yaml"],
+			[env: 'dev', filter:'cnp-deploy-argorollouts'])
+
+	awaitApproval([approvers: approvers, time: 60, unit: 'MINUTES', message: 'Do you want to continue deployment to dev with normal topic?', scope:"deployable"])
+
+	// ------- DEPLOY TO DEV openshift---- //
+
+
+// ------- DEPLOY TO DEV OpenShift---- //
+	env.CNP_OC_BASE_HOST=".openshift.evernorthcloud.com"
+
+	deploy([configDir       : "dev",
+			platform        : "OpenShift",
+			cluster         :  devcluster,
+			imageName	    : "${getVal(imageBuildResult, "imageName")}",
+			imageTag	    : "${getVal(imageBuildResult, "tagName")}",
+			ingressBaseHost : "apps-2.hs-3-nonprod.openshift.evernorthcloud.com",
+			appName         : "pharmacylevelbenefit-rxb-intent-1-dev",
+			useArgoCD       : true,
+			argoAppName     : "pharmacylevelbenefit-rxb-intent-1-dev",
+			namespace       : devNamespace,
+			timeout         : "60s",
+			progressingRetryCount: 10,
+			configRepo: "https://github.sys.cigna.com/cigna/plb-dev-argocd",
+			monitoringSolution: "newrelic",
+			cmdbApplicationServiceNumber: "AS026227"],
+			[env: 'dev', filter:'cnp-deploy-argorollouts'])
+
+	// ------- DEPLOY TO DEV openshift---- //
+
+	cutover([configDir	: "dev",
+			 platform 	: "OpenShift",
+			 cluster  	:  devcluster,
+			 appName  	: "pharmacylevelbenefit-rxb-intent-1-dev",
+			 timeout     : "30s",
+			 progressingRetryCount: 4,
+			 namespace	: devNamespace],
+			[env: 'dev',filter:'cnp-deploy-argorollouts'])
+
+
+	awaitApproval([approvers: approvers, time: 60, unit: 'MINUTES', message: 'Do you want to continue deployment to qa?', scope:"deployable"])
+
+	// ------- DEPLOY TO QA --------- //
+	env.CNP_OC_BASE_HOST=".openshift.evernorthcloud.com"
+
+	deploy([configDir       : "qa",
+			platform        : "OpenShift",
+			cluster         :  qacluster,
+			imageName	    : "${getVal(imageBuildResult, "imageName")}",
+			imageTag	    : "${getVal(imageBuildResult, "tagName")}",
+			ingressBaseHost : "apps-2.hs-3-nonprod.openshift.evernorthcloud.com",
+			appName         : "pharmacylevelbenefit-rxb-intent-1-qa",
+			useArgoCD       : true,
+			argoAppName     : "pharmacylevelbenefit-rxb-intent-1-qa",
+			namespace       : qaNamespace,
+			timeout         : "60s",
+			progressingRetryCount: 15,
+			configRepo: "https://github.sys.cigna.com/cigna/plb-qa-argocd",
+			monitoringSolution: "newrelic",
+			cmdbApplicationServiceNumber: "AS026227",
+			valuesFile      : "preview-values.yaml"],
+			[env: 'qa',filter:'cnp-deploy-argorollouts'])
+
+	awaitApproval([approvers: approvers, time: 60, unit: 'MINUTES', message: 'Do you want to continue deployment to qa with normal topic?', scope:"deployable"])
+
+	// ------- DEPLOY TO QA --------- //
+	env.CNP_OC_BASE_HOST=".openshift.evernorthcloud.com"
+
+	deploy([configDir       : "qa",
+			platform        : "OpenShift",
+			cluster         :  qacluster,
+			imageName	    : "${getVal(imageBuildResult, "imageName")}",
+			imageTag	    : "${getVal(imageBuildResult, "tagName")}",
+			ingressBaseHost : "apps-2.hs-3-nonprod.openshift.evernorthcloud.com",
+			appName         : "pharmacylevelbenefit-rxb-intent-1-qa",
+			useArgoCD       : true,
+			argoAppName     : "pharmacylevelbenefit-rxb-intent-1-qa",
+			namespace       : qaNamespace,
+			timeout         : "60s",
+			progressingRetryCount: 15,
+			configRepo: "https://github.sys.cigna.com/cigna/plb-qa-argocd",
+			monitoringSolution: "newrelic",
+			cmdbApplicationServiceNumber: "AS026227"],
+			[env: 'qa',filter:'cnp-deploy-argorollouts'])
+
+
+	cutover([configDir	: "qa",
+			 platform 	: "OpenShift",
+			 cluster  	:  qacluster,
+			 appName  	: "pharmacylevelbenefit-rxb-intent-1-qa",
+			 timeout     : "30s",
+			 progressingRetryCount: 4,
+			 namespace	: qaNamespace],
+			[env: 'qa',filter:'cnp-deploy-argorollouts'])
+
+
+	awaitApproval([approvers: approvers, time: 20, unit: 'MINUTES', message: 'Do you want to continue deployment to Prod candidate?', scope:"release"])
+
+	def publishResult = publishImage([
+			sourceImage:"${getVal(imageBuildResult, "publishUrl")}",
+			signImage:true
+	])
+
+	// ------- DEPLOY TO PROD OPENSHIFT--------- //
+
+	env.CNP_OC_BASE_HOST=".openshift.evernorthcloud.com"
+
+	preRelease {
+		deploy([
+				configDir            : "prod",
+				platform             : "OpenShift",
+				cluster              :  prodCluster,
+				imageName            : "${getVal(publishResult, "imageName")}",
+				imageTag             : "${getVal(publishResult, "tagName")}",
+				ingressBaseHost      : "apps-1.hs-2-prod.openshift.evernorthcloud.com",
+				appName              : "pharmacylevelbenefit-rxb-intent-1-prod",
+				namespace            : prodNamespace,
+				useArgoCD            : true,
+				timeout              : "240s",
+				progressingRetryCount: 10,
+				argoAppName          : "pharmacylevelbenefit-rxb-intent-1-prod",
+				monitoringSolution   : "newrelic",
+				server               : "https://api.hs-2-prod.openshift.evernorthcloud.com:6443",
+                                argoCDServer         : "argocd-devops.apps.hs-2-prod.openshift.evernorthcloud.com",
+				configRepo           : "https://github.sys.cigna.com/cigna/plb-prod-argocd",
+				valuesFile           : "preview-values.yaml"],
+		                [env: 'prod', filter: 'cnp-deploy-argorollouts'])
+
+	}
+
+	release {
+		deploy([
+				configDir            : "prod",
+				platform             : "OpenShift",
+				cluster              :  prodCluster,
+				imageName            : "${getVal(publishResult, "imageName")}",
+				imageTag             : "${getVal(publishResult, "tagName")}",
+				ingressBaseHost      : "apps-1.hs-2-prod.openshift.evernorthcloud.com",
+				appName              : "pharmacylevelbenefit-rxb-intent-1-prod",
+				namespace            : prodNamespace,
+				useArgoCD            : true,
+				timeout              : "240s",
+				progressingRetryCount: 10,
+				argoAppName          : "pharmacylevelbenefit-rxb-intent-1-prod",
+				monitoringSolution   : "newrelic",
+				server               : "https://api.hs-2-prod.openshift.evernorthcloud.com:6443",
+                                argoCDServer         : "argocd-devops.apps.hs-2-prod.openshift.evernorthcloud.com",
+				configRepo           : "https://github.sys.cigna.com/cigna/plb-prod-argocd",
+		], [env: 'prod', filter: 'cnp-deploy-argorollouts'])
+
+		cutover([
+				configDir: "prod",
+				platform : "OpenShift",
+				cluster  :  prodCluster,
+				appName  : "pharmacylevelbenefit-rxb-intent-1-prod",
+				namespace:  prodNamespace,
+				timeout: "30s",
+				progressingRetryCount: 4,
+				server               : "https://api.hs-2-prod.openshift.evernorthcloud.com:6443",
+                                argoCDServer         : "argocd-devops.apps.hs-2-prod.openshift.evernorthcloud.com",
+		],[env: 'prod', filter:'cnp-deploy-argorollouts'])
+
+	}
+
+
+}

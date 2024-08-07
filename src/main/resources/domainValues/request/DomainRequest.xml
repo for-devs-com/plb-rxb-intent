@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Request xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="DomainRequest.xsd">
+    <TestMode>TestMode</TestMode>
+    <UserId>UserId</UserId>
+    <Role>Role</Role>
+    <Channel>Channel</Channel>
+    <Format>Format</Format>
+    <DomainName>DomainName</DomainName>
+</Request>
