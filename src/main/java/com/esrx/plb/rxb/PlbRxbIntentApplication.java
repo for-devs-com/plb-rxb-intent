@@ -6,18 +6,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 
 import java.util.Arrays;
 
 
 @Slf4j
 @Configuration
-@ComponentScan(basePackages = {"com.esrx.plb.rxb","com.esrx.plb.commons"}, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {com.esrx.plb.rxb.config.WebSecurityConfiguration.class}))
-@SpringBootApplication(exclude = {KafkaAutoConfiguration.class, DataSourceAutoConfiguration.class, RabbitAutoConfiguration.class})
+@ComponentScan(basePackages = {"com.esrx.plb.rxb", "com.esrx.plb.commons"})
+@SpringBootApplication(exclude = {KafkaAutoConfiguration.class, DataSourceAutoConfiguration.class,
+        RabbitAutoConfiguration.class, SecurityAutoConfiguration.class,
+        org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration.class})
 public class PlbRxbIntentApplication {
 
     public static void main(String[] args) {

@@ -1,6 +1,5 @@
 package com.esrx.plb.rxb.config;
 
-import com.esrx.plb.commons.impl.cit.CitIntentObject;
 import com.esrx.plb.commons.process.PlbIntentFlow;
 import com.esrx.plb.rxb.impl.RxbIntentObject;
 import lombok.extern.slf4j.Slf4j;
