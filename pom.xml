@@ -280,29 +280,11 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>com.esrx</groupId>
-            <artifactId>thirdparty-dependencies</artifactId>
-            <version>10.0.0</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.esrx.common</groupId>
-            <artifactId>common-dependencies</artifactId>
-            <version>12.0.0</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
+
         <!-- Junit dependencies ends-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.esrx.plb</groupId>
-            <artifactId>pharmacylevelbenefit-commons</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <dependencyManagement>
@@ -500,6 +482,21 @@
                             <forceRegenerate>true</forceRegenerate>
                         </configuration>
                     </execution>-->
+                    <execution>
+                        <id>client_intent</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <extension>true</extension>
+                            <strict>true</strict>
+                            <schemaDirectory>src/main/resources/xsd/rxb</schemaDirectory>
+                            <generatePackage>org.rxbxml.model</generatePackage>
+                            <removeOldOutput>false</removeOldOutput>
+                            <forceRegenerate>true</forceRegenerate>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
