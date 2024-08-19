@@ -13,16 +13,11 @@ import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import static com.esrx.plb.rxb.util.RxbConstants.*;
 
 @Slf4j
 public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctions {
-    public static String[] homeDeliveryProgramValidValues = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
-    public static String M_Indicator = "M";
-    ObjectMapper objectMapper;
 
-  /*  public static
-    public static String Y_Indicator = "Y";*/
-    HashMap<String, Object> response = new HashMap<>();
 
     @Override
     public void parseIntentXml() {
@@ -30,8 +25,6 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
         //TODO this method should parse the XML and build the plbSetups
         try {
             if (getIntentXml() != null) {
-                log.info("XML Parsing code");
-
                 JAXBContext jaxbContext = JAXBContext.newInstance(PharmacyBenefits.class);
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                 StringReader stringReader = new StringReader(getIntentXml());
@@ -40,8 +33,8 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
                     List<BPLHeader> bplHeaders = pharmacyBenefits.getBPLs().getBPLHeader();
                     for (BPLHeader bplHeader : bplHeaders) {
                         String homeDeliveryProgram = bplHeader.getHomeDeliveryProgram();
-                        boolean isValidHomeDeliveryProgramVal = Arrays.stream(homeDeliveryProgramValidValues).anyMatch(s -> s.equals(homeDeliveryProgram));
-                        if (isValidHomeDeliveryProgramVal) {
+                        setXmlParseError(!Arrays.stream(HOME_DELIVERY_PROGRAM_VALID_VALUES).anyMatch(s -> s.equals(homeDeliveryProgram)));
+                        if (!isXmlParseError()) {
                             if (homeDeliveryProgram.equals("4")) {
 
                             } else if (homeDeliveryProgram.equals("5")) {
@@ -51,6 +44,11 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
                             } else if (homeDeliveryProgram.equals("7")) {
 
                             }
+                        } else {
+                            //TODO Should throw ProcessFailedException
+                            // is this a fatal error?
+
+                            setXmlParseErrorMessage("Invalid HomeDeliveryProgram");
 
                         }
                     }
