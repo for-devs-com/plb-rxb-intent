@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.esrx</groupId>
         <artifactId>java-parent</artifactId>
-        <version>10.0.0</version>
+        <version>10.1.0</version>
     </parent>
     <groupId>com.esrx.plb</groupId>
     <artifactId>pharmacylevelbenefit-rxb-intent</artifactId>
