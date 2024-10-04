@@ -1,14 +1,15 @@
 package com.esrx.plb.rxb.impl;
 
 import com.esrx.plb.commons.dto.hc13.request.*;
-import com.esrx.plb.commons.dto.hc13.request.PharmacyNetworkDetails;
-import com.esrx.plb.commons.dto.hc13.request.ProductDetails;
 import com.esrx.plb.commons.dto.hc13.response.HC13Response;
 import com.esrx.plb.commons.model.process.*;
 import com.esrx.plb.commons.process.PlbIntentFunctions;
+import com.esrx.plb.commons.service.HC13Service;
 import com.esrx.plb.commons.utils.ApplicationConstants;
 import com.esrx.plb.commons.utils.ProcessFailedException;
 import com.esrx.plb.commons.utils.PropertyProvider;
+import com.esrx.plb.postgres.service.PlbRuleService;
+import com.express_scripts.inf.types.InvalidRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +37,8 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
     @Autowired
     PropertyProvider propertyProvider;
 
-    /*@Autowired
-    private PlbRuleService plbRuleService;*/
+    @Autowired
+    private PlbRuleService plbRuleService;
 
     @Override
     public void parseIntentXml() throws ProcessFailedException {
@@ -83,7 +84,7 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
      * homeDeliveryProgram (HDP)
      */
     private void createPlbSetup(String cbmEntity, String homeDeliveryProgram, List<PlbSetup> rxbPlbSetups, short idx) {
-        //For each CBM Entity in the JSON
+        //For each CBM Entity in the JSON,
         //find the associated setup from the Intent XML
         PlbSetup plbSetup = new PlbSetup(idx);
         for (CbmEntity ce : getCbmEntities()) {
@@ -94,7 +95,7 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
                 plbSetup.setCbmEntity(ce.getName());
 
                 if (Arrays.stream(new String[]{"4", "5", "6", "7", "8", "9", "10", "11"}).anyMatch(s -> s.equals(homeDeliveryProgram))) {
-                    //HDP = 8,9,10,11 and copay flag = M logic create a setup with
+                    //HDP = 8,9,10,11, and copay flag = M logic creates a setup with
                     // channel = retail
                     // pharmacy = ALL
                     // appliesTo = Maintenance
@@ -228,7 +229,7 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
 
     @Override
     public void compareIntentWithCurrentRules() throws ProcessFailedException {
-        //TODO call HC13
+        // call HC13 PBPLB-5233
         // compare with the intent rules
         // the result of this comparison should create PLB rules for MF call
         try {
@@ -240,14 +241,14 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
             ClientEntityDetails clientEntityDetails = new ClientEntityDetails();
             List<ClientEntity> clientEntities = new ArrayList<>();
             ClientEntity clientEntity = new ClientEntity();
-           List<CbmEntity> cbmEntities =  getCbmEntities();
-           if(cbmEntities.size() > 0) {
-               CbmEntity cbmentity = cbmEntities.get(0);
-               hc13Request.setAsOfDate(cbmentity.getChangeEffDate()); // entity_change_eff_date from Json of entity_info[0]
+            List<CbmEntity> cbmEntities = getCbmEntities();
+            if (cbmEntities.size() > 0) {
+                CbmEntity cbmentity = cbmEntities.get(0);
+                hc13Request.setAsOfDate(cbmentity.getChangeEffDate()); // entity_change_eff_date from Json of entity_info[0]
 
-               clientEntity.setEntityAgnId(String.valueOf(cbmentity.getAgn())); // entity_agn from entity_info [0]
-               clientEntity.setEntityName(String.valueOf(cbmentity.getName())); // entity_name from entity_info [0]
-           }
+                clientEntity.setEntityAgnId(String.valueOf(cbmentity.getAgn())); // entity_agn from entity_info [0]
+                clientEntity.setEntityName(String.valueOf(cbmentity.getName())); // entity_name from entity_info [0]
+            }
             clientEntities.add(clientEntity);
             clientEntityDetails.setClientEntities(clientEntities);
 
@@ -259,11 +260,11 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
             pharmacyNetworkDetails.setPharmacyNetworkEntities(pharmacyNetworkEntities);
 
             ProductDetails productDetails = new ProductDetails();
-            productDetails.setChannelType("B");
+            productDetails.setChannelType(CHANNEL_TYPE);
             Copay copay = new Copay();
             copay.setIndicator(NONE); // search for all copays, it should always be "NONE"
             productDetails.setCopay(copay);
-            productDetails.setHierarchyIndicartor("2");
+            productDetails.setHierarchyIndicartor(HIERARCHY_INDICATOR);
             hc13Request.setTestMode(NO_IND); // always N
             hc13Request.setUserId(propertyProvider.ldapUser); // user_id from config server (ldap.username)
             //hc13Request.setOrgId(ORG_ID);  // ESI always move into constants
@@ -271,8 +272,8 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
             hc13Request.setTimeOut(Long.valueOf(propertyProvider.searchBenefitTimeOut)); // move this into Config properties
             //hc13Request.setTimeOut(30000L);
             hc13Request.setCarrierName(this.getCarrierDiv()); // 'carrier_div' from Request Json
-            hc13Request.setCarrierAgnId("33368691");
-            //hc13Request.setCarrierAgnId(String.valueOf(plbRuleService.fetchCarrierOrDivAgn(this.getCarrierDiv()))); // fetch "fetchCarrierOrDivAgn() from plb-postgres API
+            //hc13Request.setCarrierAgnId("33368691");
+            hc13Request.setCarrierAgnId(String.valueOf(plbRuleService.fetchCarrierOrDivAgn(this.getCarrierDiv()))); // fetch "fetchCarrierOrDivAgn() from plb-postgres API
             hc13Request.setStartingRuleIndex(RULE_INDEX); // move into constants
             hc13Request.setEndingRuleIndex(MAX_HC13_RULE_INDEX);
             //hc13Request.setAsOfDate(this.getEffectiveDateOfChange()); // entity_change_eff_date from Json of entity_info[0]
@@ -283,47 +284,65 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
             hc13Request.setProductDetails(productDetails);
 
             HC13Response hc13Response = getHc13Service().findBenefitRules(hc13Request); // get count
-            log.info("HC13 Response :  {}", hc13Response.getStatusCode());
+            log.info("HC13 Response StatusCode where CountOnly 'Y' for copay :  {}", hc13Response.getStatusCode());
+            // set copay existing rules
+            setExistingRules(getHc13Service(), hc13Request, hc13Response, this.existingRules);
 
-            int ruleCount = Integer.parseInt(hc13Response.getRuleCount().getClientsPLBCount().get(0).getClientRuleCount());
-            List<HC13Response.PLBRuleDtls> existingRulesDetails = new ArrayList<>();
-            if(ruleCount > 70){
-                int startCount = ruleCount;
-                int startIndex = 1;
-                while(startCount > 0) {
-                    hc13Request.setCountOnly(NO_N);
-                    hc13Request.setStartingRuleIndex(String.valueOf(startIndex));
-                    int endIndex= startIndex+69;
-                    hc13Request.setEndingRuleIndex(String.valueOf(endIndex));
-                    HC13Response hc13ResponseObj = getHc13Service().findBenefitRules(hc13Request);
-                    // set existingRules to a base object
-                    if(hc13ResponseObj != null && hc13ResponseObj.getBenefitsRule() != null) {
-                        if(this.getExistingRules() == null){
-                            existingRules = hc13ResponseObj.getBenefitsRule().getPLBRuleDtls();
-                        } else {
-                            this.getExistingRules().addAll(hc13ResponseObj.getBenefitsRule().getPLBRuleDtls());
-                        }
-                    }
-                    startIndex = endIndex+1;
-                    startCount= startCount-70;
-                }
-            } else {
-                hc13Request.setCountOnly(YES_Y);
-                hc13Request.setStartingRuleIndex(String.valueOf(1));
-                hc13Request.setEndingRuleIndex(String.valueOf(ruleCount));
-                HC13Response hc13ResponseObj = getHc13Service().findBenefitRules(hc13Request);
-                // set existingRules to a base object
-                existingRules = hc13ResponseObj.getBenefitsRule().getPLBRuleDtls();
-            }
-            //TODO loop through for each 70 rules
-            // hc13Response.getRuleCount() >70 set hc13Request.setStartingRuleIndex(); and endingindex()
-            // hc13Response.getBenefitsRule().getPLBRuleDtls() should set to the base object (existingRules)
-            // getHc13Service().findBenefitRules(new FindRequest()); // get rules
+            //call Plan rules
+            hc13Request.setCountOnly(YES_Y);
+            ProductDetails planProductDetails = new ProductDetails();
+            planProductDetails.setChannelType(CHANNEL_TYPE);
+            planProductDetails.setHierarchyIndicartor(HIERARCHY_INDICATOR);
+            Plan plan = new Plan();
+            plan.setIndicator(NONE);
+            planProductDetails.setPlan(plan);
+            hc13Request.setProductDetails(planProductDetails);
+            HC13Response planhc13Response = getHc13Service().findBenefitRules(hc13Request); // get count
+            log.info("HC13 Response StatusCode where CountOnly 'Y' for plan :  {}", planhc13Response.getStatusCode());
+            // set copay existing rules
+            setExistingRules(getHc13Service(), hc13Request, planhc13Response, this.existingRules);
         } catch (Exception e) {
             throw new ProcessFailedException(ProcessFailedException.ErrorTypes.PROCESSING_ERROR, e.getMessage());
         }
     }
 
+
+    public void setExistingRules(HC13Service hc13Service, FindRequest hc13Request, HC13Response hc13Response, List<HC13Response.PLBRuleDtls> existingRules) throws InvalidRequest {
+        int ruleCount = Integer.parseInt(hc13Response.getRuleCount().getClientsPLBCount().get(0).getClientRuleCount());
+        List<HC13Response.PLBRuleDtls> existingRulesDetails = new ArrayList<>();
+        if (ruleCount > 70) {
+            int startCount = ruleCount;
+            int startIndex = 1;
+            while (startCount > 0) {
+                hc13Request.setCountOnly(NO_N);
+                hc13Request.setStartingRuleIndex(String.valueOf(startIndex));
+                int endIndex = startIndex + 69;
+                hc13Request.setEndingRuleIndex(String.valueOf(endIndex));
+                HC13Response hc13ResponseObj = hc13Service.findBenefitRules(hc13Request);
+                // set existingRules to a base object
+                if (hc13ResponseObj != null && hc13ResponseObj.getBenefitsRule() != null) {
+                    if (this.existingRules == null) {
+                        this.existingRules = hc13ResponseObj.getBenefitsRule().getPLBRuleDtls();
+                    } else {
+                        this.existingRules.addAll(hc13ResponseObj.getBenefitsRule().getPLBRuleDtls());
+                    }
+                }
+                startIndex = endIndex + 1;
+                startCount = startCount - 70;
+            }
+        } else {
+            hc13Request.setCountOnly(YES_Y);
+            hc13Request.setStartingRuleIndex(String.valueOf(1));
+            hc13Request.setEndingRuleIndex(String.valueOf(ruleCount));
+            HC13Response hc13ResponseObj = getHc13Service().findBenefitRules(hc13Request);
+            // set existingRules to a base object
+            if (this.existingRules == null) {
+                this.existingRules = hc13ResponseObj.getBenefitsRule().getPLBRuleDtls();
+            } else {
+                this.existingRules.addAll(hc13ResponseObj.getBenefitsRule().getPLBRuleDtls());
+            }
+        }
+    }
 
     @Override
     public void buildPlbIntentRules() {
@@ -338,7 +357,7 @@ public class RxbIntentObject extends PlbIntentObject implements PlbIntentFunctio
             //Iterate through each CBM entity
             for (CbmEntity entity : this.getCbmEntities()) {
                 //If the setup is for the CBM entity
-                if(setup.getCbmEntity() !=null && !setup.getCbmEntity().isEmpty()) {
+                if (setup.getCbmEntity() != null && !setup.getCbmEntity().isEmpty()) {
                     if (setup.getCbmEntity().equalsIgnoreCase(entity.getName())) {
                         //For each PLB Product
                         for (PlbProduct product : setup.getPlbProducts()) {

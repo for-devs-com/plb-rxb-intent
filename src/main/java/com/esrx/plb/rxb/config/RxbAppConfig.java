@@ -1,6 +1,7 @@
 package com.esrx.plb.rxb.config;
 
 import com.esrx.plb.commons.process.PlbIntentFlow;
+import com.esrx.plb.postgres.dao.PlbRuleDaoImpl;
 import com.esrx.plb.rxb.impl.RxbIntentObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -22,4 +23,10 @@ public class RxbAppConfig {
     public PlbIntentFlow<RxbIntentObject> createRxbIntentFlow() {
         return new PlbIntentFlow<>(createRxbIntentObject());
     }
+
+    @Bean
+    public com.esrx.plb.postgres.dao.PlbRuleDao getPlbRuleDao() {
+        return new PlbRuleDaoImpl();
+    }
+
 }
