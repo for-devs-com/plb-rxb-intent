@@ -17,7 +17,7 @@ server:
 spring:
   cloud:
     config:
-      profile: plb-commons,plb-rxb-intent
+      profile: plb-rxb-intent,PLB-Postgres-config,plb-commons
       name: ${spring.application.name}
       failFast: false
       enabled: true

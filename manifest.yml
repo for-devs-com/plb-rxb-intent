@@ -4,8 +4,8 @@ applications:
     memory: 2GB
     instances: 1
     stack: cflinuxfs3
-    path: ./jars/pharmacylevelbenefit-fullintent-2.2.0-SNAPSHOT.jar
-    name: pharmacylevelbenefit-fullintent-1-dev-candidate
+    path: ./jars/pharmacylevelbenefit-rxb-intent-2.2.0-SNAPSHOT.jar
+    name: pharmacylevelbenefit-rxb-intent-1-dev-candidate
     services:
       - authinator
       - plb-consume-bef-authinator
@@ -14,18 +14,18 @@ applications:
       - elk-syslog-drain
     env:
       logging.config: "classpath:properties/common/log4j2.properties"
-      spring.application.name: pharmacylevelbenefit-fullintent-1-dev
+      spring.application.name: pharmacylevelbenefit-rxb-intent-1-dev
       spring.config.location: classpath:properties/common/application.properties
       spring.cloud.config.uri: "https://config-server-dev.express-scripts.com/config"
       spring.profiles.active: "service,cloud"
-      spring.cloud.config.profile: pharmacylevelbenefit-fullintent,pharmacyLevelBenefit-kafka,pharmacylevelBenefits-fullIntent-errors,pharmacylevelbenefits-reportingapi
+      spring.cloud.config.profile: plb-rxb-intent,PLB-Postgres-config,pharmacyLevelBenefit-kafka,pharmacylevelbenefits-reportingapi
 
   - buildpack: java_buildpack_2021-5
     memory: 2GB
     instances: 1
     stack: cflinuxfs3
-    path: ./jars/pharmacylevelbenefit-fullintent-2.2.0-SNAPSHOT.jar
-    name: pharmacylevelbenefit-fullintent-1-qa-candidate
+    path: ./jars/pharmacylevelbenefit-rxb-intent-2.2.0-SNAPSHOT.jar
+    name: pharmacylevelbenefit-rxb-intent-1-qa-candidate
     services:
       - authinator
       - plb-consume-bef-authinator
@@ -34,18 +34,18 @@ applications:
       - newrelic
     env:
       logging.config: "classpath:properties/common/log4j2.properties"
-      spring.application.name: pharmacylevelbenefit-fullintent-1-qa
+      spring.application.name: pharmacylevelbenefit-rxb-intent-1-qa
       spring.config.location: classpath:properties/common/application.properties
       spring.cloud.config.uri: "https://config-server-qa.express-scripts.com/config"
       spring.profiles.active: "service,cloud"
-      spring.cloud.config.profile: pharmacylevelbenefit-fullintent,pharmacyLevelBenefit-kafka,pharmacylevelBenefits-fullIntent-errors
+      spring.cloud.config.profile: pharmacylevelbenefit-rxb-intent,pharmacyLevelBenefit-kafka,pharmacylevelBenefits-fullIntent-errors
 
   - buildpack: java_buildpack_2021-5
     memory: 2GB
     instances: 1
     stack: cflinuxfs3
-    path: ./jars/pharmacylevelbenefit-fullintent-2.2.0-SNAPSHOT.jar
-    name: pharmacylevelbenefit-fullintent-1-prod-candidate
+    path: ./jars/pharmacylevelbenefit-rxb-intent-2.2.0-SNAPSHOT.jar
+    name: pharmacylevelbenefit-rxb-intent-1-prod-candidate
     services:
       - authinator
       - plb-consume-bef-authinator
@@ -53,17 +53,17 @@ applications:
       - newrelic
     env:
       logging.config: "classpath:properties/common/log4j2.properties"
-      spring.application.name: pharmacylevelbenefit-fullintent-1-prod
+      spring.application.name: pharmacylevelbenefit-rxb-intent-1-prod
       spring.cloud.config.uri: "https://config-server.express-scripts.com/config"
       spring.profiles.active: "service,cloud"
-      spring.cloud.config.profile: pharmacylevelbenefit-fullintent,pharmacyLevelBenefit-kafka,pharmacylevelBenefits-fullIntent-errors
+      spring.cloud.config.profile: plb-rxb-intent,PLB-Postgres-config,pharmacyLevelBenefit-kafka,pharmacylevelBenefits-fullIntent-errors
 
   - buildpack: java_buildpack_2021-5
     memory: 2GB
     instances: 1
     stack: cflinuxfs3
-    path: ./jars/pharmacylevelbenefit-fullintent-2.2.0-SNAPSHOT.jar
-    name: pharmacylevelbenefit-fullintent-1-dr-candidate
+    path: ./jars/pharmacylevelbenefit-rxb-intent-2.2.0-SNAPSHOT.jar
+    name: pharmacylevelbenefit-rxb-intent-1-dr-candidate
     services:
       - authinator
       - plb-consume-bef-authinator
@@ -71,7 +71,7 @@ applications:
       - newrelic
     env:
       logging.config: "classpath:properties/common/log4j2.properties"
-      spring.application.name: pharmacylevelbenefit-fullintent-1-dr
+      spring.application.name: pharmacylevelbenefit-rxb-intent-1-dr
       spring.cloud.config.uri: "https://config-server.express-scripts.com/config"
       spring.profiles.active: "service,cloud"
-      spring.cloud.config.profile: pharmacylevelbenefit-fullintent,pharmacyLevelBenefit-kafka,pharmacylevelBenefits-fullIntent-errors
+      spring.cloud.config.profile: plb-rxb-intent,PLB-Postgres-config,plb-commons,pharmacyLevelBenefit-kafka

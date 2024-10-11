@@ -1,5 +1,6 @@
 package com.esrx.plb.rxb;
 
+import com.esrx.plb.postgres.config.WebSecurityConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,16 +11,18 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 
 import java.util.Arrays;
 
 
 @Slf4j
 @Configuration
-@ComponentScan(basePackages = {"com.esrx.plb.rxb", "com.esrx.plb.commons"})
 @SpringBootApplication(exclude = {KafkaAutoConfiguration.class, DataSourceAutoConfiguration.class,
         RabbitAutoConfiguration.class, SecurityAutoConfiguration.class,
         org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration.class})
+@ComponentScan(basePackages = {"com.esrx.plb.rxb", "com.esrx.plb.commons","com.esrx.plb.postgres"})
+@ComponentScan(basePackages = "com.esrx.plb.postgres.config", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {WebSecurityConfiguration.class}) )
 public class PlbRxbIntentApplication {
 
     public static void main(String[] args) {

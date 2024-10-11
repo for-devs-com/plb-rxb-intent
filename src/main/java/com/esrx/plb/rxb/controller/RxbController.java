@@ -1,10 +1,14 @@
 package com.esrx.plb.rxb.controller;
 
+import com.esrx.plb.commons.dto.hc13.request.FindRequest;
+import com.esrx.plb.commons.dto.hc13.response.HC13Response;
 import com.esrx.plb.commons.model.cit.PharmacyEntityObject;
 import com.esrx.plb.commons.model.process.PlbIntentObject;
 import com.esrx.plb.commons.process.PlbIntentFlow;
 import com.esrx.plb.commons.process.PlbIntentProcessor;
 import com.esrx.plb.commons.service.HC13Service;
+import com.express_scripts.inf.types.InvalidRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +32,9 @@ public class RxbController {
     @Autowired
     PlbIntentFlow plbIntentFlow;
 
+    @Autowired
+    HC13Service hc13Service;
+
     @PostMapping(value = "/rxb", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> processRxbIntent(@RequestBody String jsonMsg) throws Exception {
         rxbIntentObject.setJsonMessage(jsonMsg);
@@ -48,6 +55,15 @@ public class RxbController {
                 .body(entityObject.toString());
     }
 
+    @ResponseBody
+    @PostMapping(value = "/hc13FindService", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HC13Response findBenefitService(@RequestBody FindRequest findRequest)
+            throws JsonProcessingException, InvalidRequest {
+
+        log.info("Calling HC13 service");
+        HC13Response hc13Response = hc13Service.findBenefitRules(findRequest);
+        return hc13Response;
+    }
 
 }
 

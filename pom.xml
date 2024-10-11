@@ -205,7 +205,7 @@
         <dependency>
             <groupId>com.esrx.plb</groupId>
             <artifactId>plb-postgres-service</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
